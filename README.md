@@ -1,1 +1,577 @@
-# Maritina-Gym-App
+# Maritina-Gym-App<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MARITINA • Training OS</title>
+
+<!-- PWA -->
+<link rel="icon" href="icons/icon-512.png">
+<link rel="apple-touch-icon" href="icons/icon-512.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b0714">
+
+<style>
+
+/* =========================================================
+   ROOT / THEME
+========================================================= */
+:root{
+  --bg:#0b0714;
+  --card:#161025;
+  --accent:#9b5cff;
+  --accent2:#ff4dd8;
+  --text:#ffffff;
+  --muted:#a9a3c7;
+  --good:#4cff88;
+}
+
+*{box-sizing:border-box}
+
+/* =========================================================
+   BODY
+========================================================= */
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:radial-gradient(circle at top,#1a1233,var(--bg));
+  color:var(--text);
+  overflow-x:hidden;
+}
+
+/* =========================================================
+   SPLASH SCREEN
+========================================================= */
+#splash{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at center,#1e1440,#07040e);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+  animation:fadeOut 1s ease forwards;
+  animation-delay:2.8s;
+}
+
+#splash.hidden{display:none}
+
+.splash-logo{
+  font-size:38px;
+  font-weight:800;
+  letter-spacing:3px;
+}
+
+.splash-heart{
+  display:inline-block;
+  animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.35)}
+}
+
+@keyframes fadeOut{
+  to{opacity:0;visibility:hidden}
+}
+
+/* =========================================================
+   LAYOUT
+========================================================= */
+.container{
+  max-width:520px;
+  margin:auto;
+  padding:20px;
+}
+
+.center{text-align:center}
+
+/* =========================================================
+   HEADER
+========================================================= */
+h1{
+  text-align:center;
+  margin-bottom:4px;
+  font-size:32px;
+  letter-spacing:2px;
+}
+
+.heart{
+  display:inline-block;
+  animation:pulse 1.4s infinite;
+}
+
+.subtitle{
+  text-align:center;
+  color:var(--muted);
+  margin-bottom:16px;
+}
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+button{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  border:none;
+  color:white;
+  border-radius:14px;
+  padding:10px 16px;
+  font-size:14px;
+  cursor:pointer;
+}
+
+/* =========================================================
+   CARDS
+========================================================= */
+.card,.dashboard,.analytics{
+  background:var(--card);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:14px;
+}
+
+/* =========================================================
+   PROGRESS
+========================================================= */
+.progress{
+  height:10px;
+  background:#2a2140;
+  border-radius:10px;
+  overflow:hidden;
+}
+.progress span{
+  display:block;
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+}
+
+/* =========================================================
+   TABS
+========================================================= */
+.tabs{
+  display:flex;
+  gap:6px;
+  margin-bottom:12px;
+}
+.tab{
+  flex:1;
+  text-align:center;
+  padding:8px 0;
+  background:#241c3a;
+  border-radius:12px;
+  cursor:pointer;
+}
+.tab.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+
+/* =========================================================
+   EXERCISES
+========================================================= */
+.exercise{
+  border-bottom:1px solid #241c3a;
+  padding:16px 0;
+}
+.exercise:last-child{border:none}
+
+label{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+}
+
+input[type=checkbox]{accent-color:var(--accent)}
+
+.info{
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+/* =========================================================
+   SET INPUTS
+========================================================= */
+.sets{
+  display:flex;
+  justify-content:center;
+  gap:6px;
+  margin-top:8px;
+}
+.sets input{
+  width:60px;
+  background:#241c3a;
+  border:none;
+  color:white;
+  border-radius:8px;
+  padding:6px;
+  text-align:center;
+}
+
+/* =========================================================
+   CONTROLS
+========================================================= */
+.controls{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  margin-top:10px;
+}
+.controls button{
+  background:#241c3a;
+  border:none;
+  color:white;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  font-size:18px;
+}
+
+/* =========================================================
+   NOTES
+========================================================= */
+.notes{
+  width:100%;
+  background:#241c3a;
+  border:none;
+  color:white;
+  border-radius:10px;
+  padding:8px;
+  margin-top:8px;
+  font-size:13px;
+}
+
+/* =========================================================
+   OVERLAY
+========================================================= */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:20;
+}
+.overlay-content{
+  background:var(--card);
+  border-radius:18px;
+  padding:20px;
+  width:90%;
+  max-width:420px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-logo">
+    <span class="splash-heart">💕</span>
+    MARITINA
+    <span class="splash-heart">💕</span>
+  </div>
+  <div class="subtitle">Training OS</div>
+</div>
+
+<div class="container">
+
+  <h1>
+    <span class="heart">💕</span>
+    MARITINA
+    <span class="heart">💕</span>
+  </h1>
+  <div class="subtitle">Training OS</div>
+
+  <div class="dashboard center">
+    <div class="progress"><span id="bar"></span></div>
+    <div id="stats" class="info"></div>
+  </div>
+
+  <div class="analytics center" id="analytics"></div>
+
+  <div class="tabs" id="tabs"></div>
+
+  <div class="card" id="program"></div>
+
+  <div class="center">
+    <button onclick="newWeek()">🆕 New Week</button>
+    <button onclick="resetPRs()">♻️ Reset PRs</button>
+    <button onclick="openRecap()">📊 Recap</button>
+  </div>
+
+</div>
+
+<div class="overlay" id="recapOverlay" onclick="closeRecap()">
+  <div class="overlay-content" onclick="event.stopPropagation()">
+    <h3 class="center">📊 Weekly Recap</h3>
+    <div id="recapContent" class="info"></div>
+    <div class="center" style="margin-top:10px">
+      <button onclick="closeRecap()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+
+/* =========================================================
+   CONFIG
+========================================================= */
+const DAYS=["Δευτέρα","Τρίτη","Τετάρτη","Πέμπτη","Παρασκευή"];
+const POOL={
+  Legs:["Back Squat","Front Squat","Romanian Deadlift","Walking Lunges"],
+  Push:["Bench Press","Overhead Press","Dips"],
+  Pull:["Deadlift","Pull Ups","Barbell Row"],
+  Core:["Plank","Hanging Leg Raises"],
+  Conditioning:["Burpees","Farmer Walk"]
+};
+const MIN_SETS=3,MAX_SETS=5;
+
+let activeDay=localStorage.getItem("activeDay")||DAYS[0];
+let workoutStart=null;
+
+/* =========================================================
+   HELPERS
+========================================================= */
+const shuffle=a=>[...a].sort(()=>Math.random()-0.5);
+
+/* =========================================================
+   PROGRAM GENERATION
+========================================================= */
+function generateProgram(){
+  const p={};
+  DAYS.forEach(d=>{
+    p[d]=shuffle(Object.values(POOL).flat()).slice(0,6);
+  });
+  localStorage.setItem("program",JSON.stringify(p));
+  localStorage.removeItem("checks");
+  localStorage.removeItem("setsData");
+  localStorage.removeItem("notes");
+  localStorage.removeItem("weeklyPR");
+  workoutStart=Date.now();
+}
+
+/* =========================================================
+   RENDER
+========================================================= */
+function render(){
+  renderTabs();
+
+  const p=JSON.parse(localStorage.getItem("program"));
+  const checks=JSON.parse(localStorage.getItem("checks")||"{}");
+  const sets=JSON.parse(localStorage.getItem("setsData")||"{}");
+  const notes=JSON.parse(localStorage.getItem("notes")||"{}");
+  const weeklyPR=JSON.parse(localStorage.getItem("weeklyPR")||"[]");
+
+  let total=0,done=0,totalSets=0;
+
+  Object.keys(p).forEach(day=>{
+    p[day].forEach(ex=>{
+      total++;
+      if(checks[day+"::"+ex]) done++;
+    });
+  });
+
+  document.getElementById("bar").style.width=Math.round(done/total*100)+"%";
+  document.getElementById("stats").innerText=`${done}/${total} exercises`;
+
+  document.getElementById("analytics").innerHTML=
+    `Completion <b>${Math.round(done/total*100)}%</b> •
+     PRs <b>${weeklyPR.length}</b> •
+     Sets <b>${totalSets}</b>`;
+
+  const c=document.getElementById("program");
+  c.innerHTML=`<h3 class="center">${activeDay}</h3>`;
+
+  p[activeDay].forEach(ex=>{
+    const id=activeDay+"::"+ex;
+    const checked=checks[id]||false;
+    const data=sets[id]||{count:MIN_SETS,values:[]};
+    totalSets+=data.count;
+
+    const hist=JSON.parse(localStorage.getItem("PR::"+ex)||"[]");
+    const best=hist.length?Math.max(...hist.map(h=>h.kg)):"—";
+    const last=hist.length?hist.at(-1).kg:"—";
+    const target=best!=="—"?best+2.5:"—";
+
+    let inputs="";
+    for(let i=0;i<data.count;i++){
+      inputs+=`
+        <input value="${data.values[i]||""}"
+          oninput="tempSet('${id}',${i},this.value)"
+          onblur="commitSet('${id}','${ex}',${i})">`;
+    }
+
+    c.innerHTML+=`
+      <div class="exercise">
+        <label>
+          <input type="checkbox" ${checked?"checked":""}
+            onchange="toggle('${id}')">
+          ${ex}
+        </label>
+
+        <div class="info">🎯 Last PR: ${last} kg</div>
+        <div class="info">🏆 Best Ever: ${best} kg</div>
+        <div class="info">➡ Next Target: ${target} kg</div>
+
+        <div class="sets">${inputs}</div>
+
+        <div class="controls">
+          <button onclick="changeSets('${id}',-1)">−</button>
+          <span>${data.count}</span>
+          <button onclick="changeSets('${id}',1)">+</button>
+          <button onclick="startTimer(this)">⏱</button>
+        </div>
+
+        <textarea class="notes" placeholder="Notes..."
+          oninput="saveNote('${id}',this.value)">${notes[id]||""}</textarea>
+      </div>`;
+  });
+
+  renderRecap();
+}
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+function renderTabs(){
+  const t=document.getElementById("tabs");
+  t.innerHTML="";
+  DAYS.forEach(d=>{
+    t.innerHTML+=`
+      <div class="tab ${d===activeDay?"active":""}"
+        onclick="selectDay('${d}')">${d.slice(0,3)}</div>`;
+  });
+}
+
+function selectDay(d){
+  activeDay=d;
+  localStorage.setItem("activeDay",d);
+  render();
+}
+
+function toggle(id){
+  const c=JSON.parse(localStorage.getItem("checks")||"{}");
+  c[id]=!c[id];
+  localStorage.setItem("checks",JSON.stringify(c));
+  render();
+}
+
+function tempSet(id,i,v){
+  const s=JSON.parse(localStorage.getItem("setsData")||"{}");
+  s[id]=s[id]||{count:MIN_SETS,values:[]};
+  s[id].values[i]=v;
+  localStorage.setItem("setsData",JSON.stringify(s));
+}
+
+function commitSet(id,ex,i){
+  const s=JSON.parse(localStorage.getItem("setsData")||"{}");
+  const v=parseFloat(s[id]?.values?.[i]);
+  if(!v) return;
+
+  const k="PR::"+ex;
+  const h=JSON.parse(localStorage.getItem(k)||"[]");
+  const cur=h.length?h.at(-1).kg:0;
+
+  if(v>cur){
+    h.push({kg:v,date:new Date().toLocaleDateString()});
+    localStorage.setItem(k,JSON.stringify(h));
+    const w=JSON.parse(localStorage.getItem("weeklyPR")||"[]");
+    w.push(ex+" "+v+"kg");
+    localStorage.setItem("weeklyPR",JSON.stringify(w));
+    alert("🔥 NEW PR: "+ex+" "+v+"kg");
+  }
+}
+
+function changeSets(id,d){
+  const s=JSON.parse(localStorage.getItem("setsData")||"{}");
+  s[id]=s[id]||{count:MIN_SETS,values:[]};
+  s[id].count=Math.min(MAX_SETS,Math.max(MIN_SETS,s[id].count+d));
+  localStorage.setItem("setsData",JSON.stringify(s));
+  render();
+}
+
+function startTimer(btn){
+  const t=btn.parentElement.nextElementSibling;
+  let s=90;
+  t.innerText=`⏱ ${s}s`;
+  const i=setInterval(()=>{
+    s--;
+    t.innerText=`⏱ ${s}s`;
+    if(s<=0){clearInterval(i);alert("Rest finished");t.innerText="";}
+  },1000);
+}
+
+function saveNote(id,val){
+  const n=JSON.parse(localStorage.getItem("notes")||"{}");
+  n[id]=val;
+  localStorage.setItem("notes",JSON.stringify(n));
+}
+
+function resetPRs(){
+  if(!confirm("Reset ALL PR records?"))return;
+  Object.keys(localStorage).filter(k=>k.startsWith("PR::"))
+    .forEach(k=>localStorage.removeItem(k));
+  localStorage.removeItem("weeklyPR");
+  render();
+}
+
+/* =========================================================
+   RECAP
+========================================================= */
+function renderRecap(){
+  const p=JSON.parse(localStorage.getItem("program"));
+  const c=JSON.parse(localStorage.getItem("checks")||"{}");
+  let t=0,d=0;
+
+  Object.keys(p).forEach(day=>{
+    p[day].forEach(ex=>{
+      t++;
+      if(c[day+"::"+ex]) d++;
+    });
+  });
+
+  const dur=workoutStart
+    ?Math.round((Date.now()-workoutStart)/60000)
+    :0;
+
+  document.getElementById("recapContent").innerHTML=
+    `Completion: ${Math.round(d/t*100)}%<br>
+     Exercises: ${t}<br>
+     Duration: ${dur} min<br>
+     Coach verdict: ${d/t>0.8?"🔥 Beast Mode":"💪 Solid"}`;
+}
+
+function openRecap(){
+  document.getElementById("recapOverlay").style.display="flex";
+}
+function closeRecap(){
+  document.getElementById("recapOverlay").style.display="none";
+}
+
+function newWeek(){
+  generateProgram();
+  render();
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+if(!localStorage.getItem("program")) generateProgram();
+render();
+
+setTimeout(()=>{
+  document.getElementById("splash").classList.add("hidden");
+},3000);
+
+</script>
+
+</body>
+</html>
