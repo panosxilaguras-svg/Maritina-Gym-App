@@ -1,4 +1,4 @@
-const CACHE="maritina-v1";
+const CACHE="maritina-v2";
 const ASSETS=["./","./index.html","./manifest.json"];
 
 self.addEventListener("install",e=>{
@@ -8,3 +8,4 @@ self.addEventListener("install",e=>{
 self.addEventListener("fetch",e=>{
   e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)));
 });
+
